@@ -19,7 +19,7 @@ const App = () => {
 
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>{
+    blogService.getAll().then(blogs => {
       blogs.sort((a, b) => b.likes - a.likes)
       setBlogs(blogs)
     }
@@ -35,8 +35,8 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async ({username, password}) => {
-    
+  const handleLogin = async ({ username, password }) => {
+
 
     try {
       const user = await loginService.login({
@@ -55,7 +55,7 @@ const App = () => {
       }, 4000)
 
       setUser(user)
-      
+
     } catch (exception) {
       setInfo('wrong username or password')
       setColor('red')
@@ -97,10 +97,10 @@ const App = () => {
 
   const loginForm = () => (
     <>
-    {info && <Notification text={info} color={color} />}
-    <LoginForm
-      handleSubmit={handleLogin}
-    />
+      {info && <Notification text={info} color={color} />}
+      <LoginForm
+        handleSubmit={handleLogin}
+      />
     </>
   )
 
