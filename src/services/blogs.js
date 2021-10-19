@@ -20,4 +20,12 @@ const create = async (newBlog) => {
   return response.data
 }
 
-export default { getAll, setToken, create }
+const update = async (id, payload) => {
+  const config = {
+    headers: { Authorization: token }
+  }
+  const response = await axios.patch(`${baseUrl}/${id}`, payload, config)
+  return response.data
+}
+
+export default { getAll, setToken, create, update }

@@ -22,7 +22,7 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
     )
-  }, [blogs])
+  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
@@ -73,8 +73,9 @@ const App = () => {
 
   const handleCreate = async ({ title, author, url }) => {
     try {
-      await blogService.create({ title, author, url })
+      const savedBlog = await blogService.create({ title, author, url })
       blogFormRef.current.toggleVisibility()
+      setBlogs([...blogs, savedBlog])
       setInfo(`a new blog ${title} by ${author} added`)
       setTimeout(() => {
         setInfo(null)
