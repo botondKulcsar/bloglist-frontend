@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, user }) => {
   const [details, setDetails] = useState(false)
 
   // console.log(blog?.user?.name)
@@ -18,8 +18,23 @@ const Blog = ({ blog }) => {
 
   const changeDetails = () => setDetails(!details)
 
-  const like = () => {
-    blogService.update(blog.id, { likes: blog.likes + 1 })
+  const likeBlog = async () => {
+    try {
+      await blogService.update(blog.id, { likes: blog.likes + 1 })
+    } catch (error) {
+      console.error(error)
+    }
+    
+  }
+
+  const deleteBlog = async () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      try {
+        await blogService.remove(blog.id)
+      } catch (error) {
+        console.error(error)
+      }
+    } 
   }
 
   return (
@@ -30,8 +45,9 @@ const Blog = ({ blog }) => {
             {blog.title} {blog.author}
               <button onClick={changeDetails}>hide</button><br />
             {blog.url}<br />
-            likes {blog.likes} <button onClick={like}>like</button><br />
-            {blog?.user?.name ?? ''}
+            likes {blog.likes} <button onClick={likeBlog}>like</button><br />
+            {blog?.user?.name ?? ''}<br />
+            {blog?.user?.name === user.name && <button onClick={deleteBlog}>remove</button>}
           </div>
           : <div>
             {blog.title} {blog.author}

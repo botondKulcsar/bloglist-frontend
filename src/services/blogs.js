@@ -28,4 +28,17 @@ const update = async (id, payload) => {
   return response.data
 }
 
-export default { getAll, setToken, create, update }
+const remove = async (id) => {
+  const config = {
+    headers: { Authorization: token }
+  }
+  try {
+    const response = await axios.delete(`${baseUrl}/${id}`, config)
+    return response.data
+  } catch (error) {
+    console.error(error)
+    return error.message
+  }
+}
+
+export default { getAll, setToken, create, update, remove }
