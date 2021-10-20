@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog, user=null }) => {
   const [details, setDetails] = useState(false)
 
   // console.log(blog?.user?.name)
@@ -36,7 +36,7 @@ const Blog = ({ blog, user }) => {
     }}
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       {
         details
           ? <div>
