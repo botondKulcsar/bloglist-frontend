@@ -24,7 +24,6 @@ const Blog = ({ blog, user }) => {
     } catch (error) {
       console.error(error)
     }
-    
   }
 
   const deleteBlog = async () => {
@@ -34,8 +33,7 @@ const Blog = ({ blog, user }) => {
       } catch (error) {
         console.error(error)
       }
-    } 
-  }
+    }}
 
   return (
     <div style={blogStyle}>
@@ -43,7 +41,7 @@ const Blog = ({ blog, user }) => {
         details
           ? <div>
             {blog.title} {blog.author}
-              <button onClick={changeDetails}>hide</button><br />
+            <button onClick={changeDetails}>hide</button><br />
             {blog.url}<br />
             likes {blog.likes} <button onClick={likeBlog}>like</button><br />
             {blog?.user?.name ?? ''}<br />
