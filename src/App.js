@@ -95,6 +95,14 @@ const App = () => {
 
   }
 
+  const likeBlog = async (id, numLikes) => {
+    try {
+      await blogService.update(id, { likes: numLikes + 1 })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const loginForm = () => (
     <>
       {info && <Notification text={info} color={color} />}
@@ -128,7 +136,7 @@ const App = () => {
       {blogForm()}
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user}/>
+        <Blog key={blog.id} blog={blog} user={user} likeBlog={likeBlog}/>
       )}
     </div>
   )
