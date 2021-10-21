@@ -41,6 +41,25 @@ describe('Blog app', function () {
         .and('have.css', 'border-style', 'solid')
         .and('have.css', 'color', 'rgb(255, 0, 0)')
     })
+
+    describe('when logged in', function () {
+      beforeEach(function () {
+        cy.login({ username: 'cypresshill', password: '1234' })
+      })
+
+      it('A blog can be created', function () {
+        cy.contains('create new blog').click()
+        cy.get('#title').type('first cypress blog')
+        cy.get('#author').type('Cypress Hill')
+        cy.get('input[type=url]').type('http://www.cypress-hill.com/blog')
+        cy.get('button[type=submit]').click()
+
+        cy.contains('first cypress blog Cypress Hill')
+        cy.get('button').contains('view')
+      })
+
+    })
+
   })
 
 })

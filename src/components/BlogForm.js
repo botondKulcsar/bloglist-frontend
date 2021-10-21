@@ -20,6 +20,7 @@ const BlogForm = ({ handleSubmit }) => {
         <div>
                     title:
           <input
+            id="title"
             type="text"
             value={title}
             onChange={({ target }) => setTitle(target.value)}
