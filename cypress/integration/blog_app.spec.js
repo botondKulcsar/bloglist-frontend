@@ -48,14 +48,20 @@ describe('Blog app', function () {
       })
 
       it('A blog can be created', function () {
-        cy.contains('create new blog').click()
-        cy.get('#title').type('first cypress blog')
-        cy.get('#author').type('Cypress Hill')
-        cy.get('input[type=url]').type('http://www.cypress-hill.com/blog')
-        cy.get('button[type=submit]').click()
+        cy.createBlog({ title: 'First cypress blog', author: 'Cypress Hill', url: 'http://www.cypress-hill.com/blog' })
+      })
 
-        cy.contains('first cypress blog Cypress Hill')
-        cy.get('button').contains('view')
+      describe('and the blog exists', function () {
+        beforeEach(function() {
+          cy.createBlog({ title: 'Second cypress blog', author: 'Cypress Hill', url: 'http://www.cypress-hill.com/blog2' })
+        })
+
+        it('it can be liked', function () {
+          cy.contains('view').click()
+          cy.contains('likes 0')
+          cy.contains('like').click()
+          cy.contains('likes 1')
+        })
       })
 
     })

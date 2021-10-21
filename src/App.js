@@ -24,7 +24,7 @@ const App = () => {
       setBlogs(blogs)
     }
     )
-  }, [])
+  }, [blogs])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
