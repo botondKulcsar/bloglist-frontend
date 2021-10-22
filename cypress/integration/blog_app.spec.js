@@ -62,6 +62,29 @@ describe('Blog app', function () {
           cy.contains('like').click()
           cy.contains('likes 1')
         })
+
+        it('its owner can delete it', function() {
+          cy.contains('view').click()
+          cy.contains('remove').click()
+          cy.get('html').should('not.contain', 'Second cypress blog')
+        })
+
+        it('another user cannot delete it', function() {
+          // create a new user
+          const user = {
+            name: 'Test User',
+            username: 'tester',
+            password: '1234'
+          }
+          cy.request('POST', 'http://localhost:3003/api/users', user)
+
+          cy.visit('http://localhost:3000')
+          cy.contains('Logout').click()
+          cy.login({ username: 'tester', password: '1234' })
+          cy.contains('view').click()
+          cy.should('not.contain','remove')
+        })
+
       })
 
     })
