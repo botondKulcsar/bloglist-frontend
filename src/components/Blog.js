@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
 
-const Blog = ({ blog, user=null, likeBlog }) => {
+const Blog = ({ blog, user = null, likeBlog }) => {
   const [details, setDetails] = useState(false)
 
   // console.log(blog?.user?.name)
@@ -25,7 +25,8 @@ const Blog = ({ blog, user=null, likeBlog }) => {
       } catch (error) {
         console.error(error)
       }
-    }}
+    }
+  }
 
   return (
     <div style={blogStyle} className='blog'>
@@ -35,13 +36,19 @@ const Blog = ({ blog, user=null, likeBlog }) => {
             {blog.title} {blog.author}
             <button onClick={changeDetails}>hide</button><br />
             {blog.url}<br />
-            likes {blog.likes} <button onClick={() => likeBlog(blog.id, blog.likes)}>like</button><br />
+            likes {blog.likes}
+            <button
+              className='like'
+              onClick={() => likeBlog(blog.id, blog.likes)}
+            >like</button><br />
             {blog?.user?.name ?? ''}<br />
             {blog?.user?.name === user?.name && <button onClick={deleteBlog}>remove</button>}
           </div>
           : <div>
             {blog.title} {blog.author}
-            <button onClick={changeDetails}>view</button>
+            <button
+              className='view'
+              onClick={changeDetails}>view</button>
           </div>
       }
 

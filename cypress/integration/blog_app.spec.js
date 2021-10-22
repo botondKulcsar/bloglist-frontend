@@ -70,6 +70,7 @@ describe('Blog app', function () {
         })
 
         it('another user cannot delete it', function() {
+          cy.contains('Logout').click()
           // create a new user
           const user = {
             name: 'Test User',
@@ -78,11 +79,26 @@ describe('Blog app', function () {
           }
           cy.request('POST', 'http://localhost:3003/api/users', user)
 
-          cy.visit('http://localhost:3000')
-          cy.contains('Logout').click()
           cy.login({ username: 'tester', password: '1234' })
           cy.contains('view').click()
           cy.should('not.contain','remove')
+        })
+
+        it('blogs are ordered according to likes', function() {
+          cy.createBlog({ title: 'favorite cypress blog', author: 'Cypress Hill', url: 'http://www.cypress-hill.com/blog-another' })
+          cy.get('button.view').then((viewButtons) => {
+            viewButtons[1].click()
+          })
+          cy.get('button.like').click()
+          cy.contains('likes 1')
+          cy.get('button.like').click()
+          cy.contains('likes 2')
+          cy.visit('http://localhost:3000')
+          cy.get('.blog').then(blogs => {
+            cy.get(blogs[0]).should('contain', 'favorite cypress blog')
+            cy.get(blogs[0]).find('button').click()
+            cy.get(blogs[0]).should('contain', 'likes 2')
+          })
         })
 
       })
