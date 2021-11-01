@@ -8,7 +8,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import { useSelector, useDispatch } from 'react-redux'
 import { setMessage } from './reducers/notificationReducer'
-import { initializeBlogs, createBlog } from './reducers/blogReducer'
+import { initializeBlogs, createBlog, likeBlog, deleteBlog } from './reducers/blogReducer'
 
 const App = () => {
 
@@ -63,7 +63,7 @@ const App = () => {
     setUser(null)
   }
 
-  const handleCreate = async ({ title, author, url }) => {
+  const handleCreate = ({ title, author, url }) => {
     try {
 
       dispatch(createBlog({ title, author, url }))
@@ -76,11 +76,21 @@ const App = () => {
 
   }
 
-  const likeBlog = async (id, numLikes) => {
+  const like = (id, numLikes) => {
     try {
-      await blogService.update(id, { likes: numLikes + 1 })
+      dispatch(likeBlog(id, numLikes))
     } catch (error) {
       dispatch(setMessage(error.message, 'red', 4))
+    }
+  }
+
+  const remove = (blog) => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      try {
+        dispatch(deleteBlog(blog.id))
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 
@@ -117,7 +127,7 @@ const App = () => {
       {blogForm()}
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} likeBlog={likeBlog}/>
+        <Blog key={blog.id} blog={blog} user={user} likeBlog={like} deleteBlog={remove} />
       )}
     </div>
   )

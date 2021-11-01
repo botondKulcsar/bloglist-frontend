@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
-import blogService from '../services/blogs'
+// import blogService from '../services/blogs'
 
 
-const Blog = ({ blog, user = null, likeBlog }) => {
+const Blog = ({ blog, user = null, likeBlog, deleteBlog }) => {
   const [details, setDetails] = useState(false)
 
   // console.log(blog?.user?.name)
@@ -18,15 +18,7 @@ const Blog = ({ blog, user = null, likeBlog }) => {
 
   const changeDetails = () => setDetails(!details)
 
-  const deleteBlog = async () => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      try {
-        await blogService.remove(blog.id)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-  }
+
 
   return (
     <div style={blogStyle} className='blog'>
@@ -42,7 +34,7 @@ const Blog = ({ blog, user = null, likeBlog }) => {
               onClick={() => likeBlog(blog.id, blog.likes)}
             >like</button><br />
             {blog?.user?.name ?? ''}<br />
-            {blog?.user?.name === user?.name && <button onClick={deleteBlog}>remove</button>}
+            {blog?.user?.name === user?.name && <button onClick={() => deleteBlog(blog)}>remove</button>}
           </div>
           : <div>
             {blog.title} {blog.author}

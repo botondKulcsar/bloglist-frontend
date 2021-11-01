@@ -26,6 +26,26 @@ export const createBlog = ({ title, author, url }) => {
   }
 }
 
+export const likeBlog = (id, numLikes) => {
+  return async (dispatch) => {
+    const likedBlog = await blogService.update(id, { likes: numLikes + 1 })
+    dispatch({
+      type: LIKE_BLOG,
+      data: likedBlog
+    })
+  }
+}
+
+export const deleteBlog = (id) => {
+  return async (dispatch) => {
+    await blogService.remove(id)
+    dispatch({
+      type: DELETE_BLOG,
+      data: { id }
+    })
+  }
+}
+
 const reducer = (state = [], action) => {
   switch (action.type) {
   case INIT_BLOGS:
