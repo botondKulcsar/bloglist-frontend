@@ -6,6 +6,8 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { useDispatch } from 'react-redux'
+import { setMessage } from './reducers/notificationReducer'
 
 const App = () => {
 
@@ -14,8 +16,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
-  const [info, setInfo] = useState(null)
-  const [color, setColor] = useState('green')
+  const dispatch = useDispatch()
 
 
   useEffect(() => {
@@ -49,21 +50,12 @@ const App = () => {
 
       blogService.setToken(user.token)
 
-      setInfo('login successful')
-      setTimeout(() => {
-        setInfo(null)
-      }, 4000)
+      dispatch(setMessage('login successful', 'green', 4))
 
       setUser(user)
 
     } catch (exception) {
-      setInfo('wrong username or password')
-      setColor('red')
-      setTimeout(() => {
-        setInfo(null)
-        setColor('green')
-      }, 4000)
-
+      dispatch(setMessage('wrong username or password', 'red', 4))
     }
 
   }
@@ -78,19 +70,10 @@ const App = () => {
       const savedBlog = await blogService.create({ title, author, url })
       blogFormRef.current.toggleVisibility()
       setBlogs([...blogs, savedBlog])
-      setInfo(`a new blog ${title} by ${author} added`)
-      setTimeout(() => {
-        setInfo(null)
-      }, 4000)
+      dispatch(setMessage(`a new blog ${title} by ${author} added`, 'green', 4))
 
     } catch (error) {
-      console.log(error)
-      setInfo(error.message)
-      setColor('red')
-      setTimeout(() => {
-        setInfo(null)
-        setColor('green')
-      }, 4000)
+      dispatch(setMessage(error.message, 'red', 4))
     }
 
   }
@@ -99,13 +82,13 @@ const App = () => {
     try {
       await blogService.update(id, { likes: numLikes + 1 })
     } catch (error) {
-      console.error(error)
+      dispatch(setMessage(error.message, 'red', 4))
     }
   }
 
   const loginForm = () => (
     <>
-      {info && <Notification text={info} color={color} />}
+      <Notification />
       <LoginForm
         handleSubmit={handleLogin}
       />
@@ -130,7 +113,7 @@ const App = () => {
     <div>
 
       <h2>Blogs</h2>
-      {info && <Notification text={info} color={color} />}
+      <Notification />
       <p>{user.name} logged-in <button onClick={handleLogout}>Logout</button></p>
 
       {blogForm()}
