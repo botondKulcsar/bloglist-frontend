@@ -6,26 +6,24 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { setMessage } from './reducers/notificationReducer'
+import { initializeBlogs, createBlog } from './reducers/blogReducer'
 
 const App = () => {
 
   const blogFormRef = useRef()
+  const blogs = useSelector(state => state.blogs)
 
-  const [blogs, setBlogs] = useState([])
+  // const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
   const dispatch = useDispatch()
 
 
   useEffect(() => {
-    blogService.getAll().then(blogs => {
-      blogs.sort((a, b) => b.likes - a.likes)
-      setBlogs(blogs)
-    }
-    )
-  }, [blogs])
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
@@ -67,9 +65,9 @@ const App = () => {
 
   const handleCreate = async ({ title, author, url }) => {
     try {
-      const savedBlog = await blogService.create({ title, author, url })
+
+      dispatch(createBlog({ title, author, url }))
       blogFormRef.current.toggleVisibility()
-      setBlogs([...blogs, savedBlog])
       dispatch(setMessage(`a new blog ${title} by ${author} added`, 'green', 4))
 
     } catch (error) {
