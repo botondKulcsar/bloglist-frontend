@@ -1,57 +1,35 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
-import blogService from './services/blogs'
-import loginService from './services/login'
+// import blogService from './services/blogs'
+// import loginService from './services/login'
 import { useSelector, useDispatch } from 'react-redux'
 import { setMessage } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog, likeBlog, deleteBlog } from './reducers/blogReducer'
+import { initializeUser, loginUser, logoutUser } from './reducers/userReducer'
 
 const App = () => {
 
   const blogFormRef = useRef()
   const blogs = useSelector(state => state.blogs)
-
-  // const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
+  const user = useSelector(state => state.user)
 
   const dispatch = useDispatch()
 
 
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(initializeUser())
   }, [dispatch])
 
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
 
   const handleLogin = async ({ username, password }) => {
-
-
     try {
-      const user = await loginService.login({
-        username, password
-      })
-
-      window.localStorage.setItem(
-        'loggedBloglistUser', JSON.stringify(user)
-      )
-
-      blogService.setToken(user.token)
-
+      await dispatch(loginUser({ username, password }))
       dispatch(setMessage('login successful', 'green', 4))
-
-      setUser(user)
-
     } catch (exception) {
       dispatch(setMessage('wrong username or password', 'red', 4))
     }
@@ -59,37 +37,36 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedBloglistUser')
-    setUser(null)
+    dispatch(logoutUser())
+    dispatch(setMessage('logout successful', 'green', 4))
   }
 
-  const handleCreate = ({ title, author, url }) => {
+  const handleCreate = async ({ title, author, url }) => {
     try {
-
-      dispatch(createBlog({ title, author, url }))
+      await dispatch(createBlog({ title, author, url }))
       blogFormRef.current.toggleVisibility()
       dispatch(setMessage(`a new blog ${title} by ${author} added`, 'green', 4))
-
     } catch (error) {
       dispatch(setMessage(error.message, 'red', 4))
     }
-
   }
 
-  const like = (id, numLikes) => {
+  const like = async (id, numLikes) => {
     try {
-      dispatch(likeBlog(id, numLikes))
+      await dispatch(likeBlog(id, numLikes))
+      dispatch(setMessage(`blog with id=${id} has just been liked`, 'green', 4))
     } catch (error) {
       dispatch(setMessage(error.message, 'red', 4))
     }
   }
 
-  const remove = (blog) => {
+  const remove = async (blog) => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       try {
-        dispatch(deleteBlog(blog.id))
+        await dispatch(deleteBlog(blog.id))
+        dispatch(setMessage(`blog: ${blog.title} has just been deleted`, 'green', 4))
       } catch (error) {
-        console.error(error)
+        dispatch(setMessage(error.message, 'red', 4))
       }
     }
   }
