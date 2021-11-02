@@ -8,7 +8,7 @@ const LoginForm = ({ handleSubmit }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [rePassword, setRePassword] = useState('')
-  const [showSignup, setShowSignup] = useState(true)
+  const [showSignup, setShowSignup] = useState(false)
 
   const handleLogin = (event) => {
     event.preventDefault()

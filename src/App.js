@@ -117,7 +117,7 @@ const App = () => {
         <Toolbar>
           <Button color="inherit" component={Link} to='/blogs'>blogs</Button>
           <Button color="inherit" component={Link} to='/users'>users</Button>
-          <span>{user.name} logged-in </span>
+          <span>{user.name} logged in </span>
           <Button color="inherit" onClick={handleLogout}>Logout</Button>
         </Toolbar>
       </AppBar>
