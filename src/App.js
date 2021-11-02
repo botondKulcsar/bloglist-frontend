@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Switch, Route } from 'react-router'
+import { Switch, Route, useRouteMatch, Link } from 'react-router-dom'
 
-import Blog from './components/Blog'
+import Blog, { blogStyle } from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
@@ -74,6 +74,12 @@ const App = () => {
     }
   }
 
+  const match = useRouteMatch('/blogs/:id')
+
+  const blog = match
+    ? blogs.find(b => b.id === match.params.id)
+    : null
+
   const loginForm = () => (
     <>
       <Notification />
@@ -102,7 +108,8 @@ const App = () => {
 
       <h2>Blogs</h2>
       <Notification />
-      <p>{user.name} logged-in <button onClick={handleLogout}>Logout</button></p>
+      <p>{user.name} logged-in </p>
+      <button onClick={handleLogout}>Logout</button>
 
       <Switch>
         <Route path='/users/:id'>
@@ -111,11 +118,16 @@ const App = () => {
         <Route path='/users'>
           <Users />
         </Route>
+        <Route path='/blogs/:id'>
+          <Blog blog={blog} user={user} likeBlog={like} deleteBlog={remove} />
+        </Route>
         <Route path='/'>
           {blogForm()}
 
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} user={user} likeBlog={like} deleteBlog={remove} />
+            <div key={blog.id} style={blogStyle}>
+              <Link to={`/blogs/${blog.id}`} >{blog.title} {blog.author}</Link>
+            </div>
           )}
         </Route>
       </Switch>
