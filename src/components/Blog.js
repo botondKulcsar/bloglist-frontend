@@ -11,12 +11,8 @@ export const blogStyle = {
 }
 
 const Blog = ({ blog, user = null, likeBlog, deleteBlog }) => {
-  // const [details, setDetails] = useState(false)
 
-  // console.log(blog?.user?.name)
-
-
-  // const changeDetails = () => setDetails(!details)
+  console.log(blog)
 
   if (!blog) return null
 
@@ -32,9 +28,13 @@ const Blog = ({ blog, user = null, likeBlog, deleteBlog }) => {
       </button><br />
       {blog?.user?.name ? `added by ${blog.user.name}` : ''}<br />
       {blog?.user?.name === user?.name && <button onClick={() => deleteBlog(blog)}>remove</button>}
-
-
-
+      {blog.comments.length
+        ? <div>
+          <h3>Comments</h3>
+          <ul>{blog.comments.map((comment) => <li key={comment}>{comment}</li>)}</ul>
+        </div>
+        : null
+      }
     </div>
   )
 }
