@@ -8,6 +8,7 @@ import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Users from './components/Users'
+import User from './components/User'
 
 import { setMessage } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog, likeBlog, deleteBlog } from './reducers/blogReducer'
@@ -104,6 +105,9 @@ const App = () => {
       <p>{user.name} logged-in <button onClick={handleLogout}>Logout</button></p>
 
       <Switch>
+        <Route path='/users/:id'>
+          <User />
+        </Route>
         <Route path='/users'>
           <Users />
         </Route>

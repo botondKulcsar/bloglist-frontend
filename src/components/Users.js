@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import usersService from '../services/users'
 
 const Users = () => {
@@ -7,7 +8,6 @@ const Users = () => {
     usersService.getAll()
       .then(users => {
         setUsers(users)
-        console.log(users)
       })
   }, [])
 
@@ -22,7 +22,7 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map(user => <tr key={user.id}><td>{user.name}</td><td>{user.blogs.length}</td></tr>)}
+          {users.map(user => <tr key={user.id}><td><Link to={`/users/${user.id}`}>{user.name}</Link></td><td>{user.blogs.length}</td></tr>)}
         </tbody>
       </table>
     </div>
