@@ -13,7 +13,7 @@ import User from './components/User'
 import './App.css'
 
 import { setMessage } from './reducers/notificationReducer'
-import { initializeBlogs, createBlog, likeBlog, deleteBlog } from './reducers/blogReducer'
+import { initializeBlogs, createBlog, likeBlog, deleteBlog, commentBlog } from './reducers/blogReducer'
 import { initializeUser, loginUser, logoutUser } from './reducers/userReducer'
 
 const App = () => {
@@ -76,6 +76,10 @@ const App = () => {
     }
   }
 
+  const addCommentToBlog = (id, comment) => {
+    dispatch(commentBlog(id, comment))
+  }
+
   const match = useRouteMatch('/blogs/:id')
 
   const blog = match
@@ -115,6 +119,7 @@ const App = () => {
           <li><button onClick={handleLogout}>Logout</button></li>
         </ul>
       </nav>
+
       <h2>blog app</h2>
       <Notification />
 
@@ -126,7 +131,7 @@ const App = () => {
           <Users />
         </Route>
         <Route path='/blogs/:id'>
-          <Blog blog={blog} user={user} likeBlog={like} deleteBlog={remove} />
+          <Blog blog={blog} user={user} likeBlog={like} deleteBlog={remove} addComment={addCommentToBlog}/>
         </Route>
         <Route path='/blogs'>
           {blogForm()}

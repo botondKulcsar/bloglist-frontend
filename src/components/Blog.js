@@ -1,6 +1,4 @@
-import React from 'react'
-
-// import blogService from '../services/blogs'
+import React, { useState } from 'react'
 
 export const blogStyle = {
   paddingTop: 10,
@@ -10,9 +8,17 @@ export const blogStyle = {
   marginBottom: 5
 }
 
-const Blog = ({ blog, user = null, likeBlog, deleteBlog }) => {
+const Blog = ({ blog, user = null, likeBlog, deleteBlog, addComment }) => {
 
-  console.log(blog)
+  const [comment, setComment] = useState('')
+
+  const submitComment = () => {
+    if (!comment) {
+      return alert('Please enter a valid comment!')
+    }
+    addComment(blog.id, comment)
+    setComment('')
+  }
 
   if (!blog) return null
 
@@ -28,9 +34,17 @@ const Blog = ({ blog, user = null, likeBlog, deleteBlog }) => {
       </button><br />
       {blog?.user?.name ? `added by ${blog.user.name}` : ''}<br />
       {blog?.user?.name === user?.name && <button onClick={() => deleteBlog(blog)}>remove</button>}
+      <h3>Comments</h3>
+      <input
+        type="text"
+        value={comment}
+        onChange={({ target }) => setComment(target.value)}
+      />
+      <button
+        onClick={submitComment}
+      >add comment</button>
       {blog.comments.length
         ? <div>
-          <h3>Comments</h3>
           <ul>{blog.comments.map((comment) => <li key={comment}>{comment}</li>)}</ul>
         </div>
         : null

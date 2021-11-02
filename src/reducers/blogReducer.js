@@ -3,6 +3,7 @@ import blogService from '../services/blogs'
 const INIT_BLOGS = 'INIT_BLOGS'
 const CREATE_BLOG = 'CREATE_BLOG'
 const LIKE_BLOG = 'LIKE_BLOG'
+const COMMENT_BLOG = 'COMMENT_BLOG'
 const DELETE_BLOG = 'DELETE_BLOG'
 
 export const initializeBlogs = () => {
@@ -36,6 +37,16 @@ export const likeBlog = (id, numLikes) => {
   }
 }
 
+export const commentBlog = (id, comment) => {
+  return async (dispatch) => {
+    const commentedBlog = await blogService.createComment(id, comment)
+    dispatch({
+      type: COMMENT_BLOG,
+      data: commentedBlog
+    })
+  }
+}
+
 export const deleteBlog = (id) => {
   return async (dispatch) => {
     await blogService.remove(id)
@@ -53,6 +64,8 @@ const reducer = (state = [], action) => {
   case CREATE_BLOG:
     return [...state, action.data]
   case LIKE_BLOG:
+    return state.map(blog => blog.id === action.data.id ? action.data : blog)
+  case COMMENT_BLOG:
     return state.map(blog => blog.id === action.data.id ? action.data : blog)
   case DELETE_BLOG:
     return state.filter(blog => blog.id !== action.data.id)
