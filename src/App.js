@@ -115,7 +115,7 @@ const App = () => {
     <>
       <AppBar position="static">
         <Toolbar>
-          <Button color="inherit" component={Link} to='/blogs'>blogs</Button>
+          <Button color="inherit" component={Link} to='/'>blogs</Button>
           <Button color="inherit" component={Link} to='/users'>users</Button>
           <span>{user.name} logged in </span>
           <Button color="inherit" onClick={handleLogout}>Logout</Button>
@@ -135,7 +135,7 @@ const App = () => {
           <Route path='/blogs/:id'>
             <Blog blog={blog} user={user} likeBlog={like} deleteBlog={remove} addComment={addCommentToBlog} />
           </Route>
-          <Route path='/blogs'>
+          <Route path='/'>
             {blogForm()}
             <Table>
               <TableHead>
@@ -154,6 +154,7 @@ const App = () => {
             </Table>
           </Route>
         </Switch>
+        <p>Copyright &copy; 2021 Botond Kulcsár</p>
       </Container>
     </>
   )
