@@ -10,6 +10,8 @@ import BlogForm from './components/BlogForm'
 import Users from './components/Users'
 import User from './components/User'
 
+import './App.css'
+
 import { setMessage } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog, likeBlog, deleteBlog } from './reducers/blogReducer'
 import { initializeUser, loginUser, logoutUser } from './reducers/userReducer'
@@ -105,11 +107,16 @@ const App = () => {
 
   return (
     <div>
-
-      <h2>Blogs</h2>
+      <nav>
+        <ul>
+          <li><Link to='/blogs'>blogs</Link></li>
+          <li><Link to='/users'>users</Link></li>
+          <li>{user.name} logged-in </li>
+          <li><button onClick={handleLogout}>Logout</button></li>
+        </ul>
+      </nav>
+      <h2>blog app</h2>
       <Notification />
-      <p>{user.name} logged-in </p>
-      <button onClick={handleLogout}>Logout</button>
 
       <Switch>
         <Route path='/users/:id'>
@@ -121,7 +128,7 @@ const App = () => {
         <Route path='/blogs/:id'>
           <Blog blog={blog} user={user} likeBlog={like} deleteBlog={remove} />
         </Route>
-        <Route path='/'>
+        <Route path='/blogs'>
           {blogForm()}
 
           {blogs.map(blog =>

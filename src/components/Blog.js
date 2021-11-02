@@ -23,7 +23,7 @@ const Blog = ({ blog, user = null, likeBlog, deleteBlog }) => {
   return (
     <div className='blog'>
       <h2>{blog.title} {blog.author}</h2>
-      <a href={blog.url}>{blog.url}</a><br />
+      <a href={blog.url} rel="noreferrer" target="_blank">{blog.url}</a><br />
       {blog.likes} likes
       <button
         className='like'
