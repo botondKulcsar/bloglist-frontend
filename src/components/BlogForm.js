@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
+import { Box, TextField, Button } from '@mui/material'
+
 const BlogForm = ({ handleSubmit }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -16,35 +18,41 @@ const BlogForm = ({ handleSubmit }) => {
   return (
     <div>
       <h2>Create new</h2>
-      <form onSubmit={handleCreate}>
-        <div>
-                    title:
-          <input
-            id="title"
-            type="text"
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-                    author:
-          <input
-            id='author'
-            type="text"
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-                    url:
-          <input
-            type="url"
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-        <button type="submit">create</button>
-      </form>
+      <Box
+        onSubmit={handleCreate}
+        component="form"
+        sx={{ my: '1rem' }}
+      >
+        <TextField
+          required
+          label="Title"
+          id="title"
+          type="text"
+          value={title}
+          onChange={({ target }) => setTitle(target.value)}
+          sx={{ mr: '1rem' }}
+        />
+        <TextField
+          required
+          id='author'
+          label='Author'
+          type="text"
+          value={author}
+          onChange={({ target }) => setAuthor(target.value)}
+          sx={{ mr: '1rem' }}
+        />
+        <TextField
+          required
+          label="URL"
+          type="url"
+          value={url}
+          onChange={({ target }) => setUrl(target.value)}
+          sx={{ mr: '1rem' }}
+        />
+
+        <Button type="submit" variant="contained" size="large">create</Button>
+
+      </Box>
     </div>
   )
 }

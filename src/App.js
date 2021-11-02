@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Switch, Route, useRouteMatch, Link } from 'react-router-dom'
 
-import Blog, { blogStyle } from './components/Blog'
+import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
@@ -15,6 +15,8 @@ import './App.css'
 import { setMessage } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog, likeBlog, deleteBlog, commentBlog } from './reducers/blogReducer'
 import { initializeUser, loginUser, logoutUser } from './reducers/userReducer'
+
+import { Container, Table, TableBody, TableRow, TableCell, Link as MatLink, TableHead, AppBar, Toolbar, Button } from '@mui/material'
 
 const App = () => {
 
@@ -87,12 +89,12 @@ const App = () => {
     : null
 
   const loginForm = () => (
-    <>
+    <Container>
       <Notification />
       <LoginForm
         handleSubmit={handleLogin}
       />
-    </>
+    </Container>
   )
 
   const blogForm = () => {
@@ -110,42 +112,50 @@ const App = () => {
   }
 
   return (
-    <div>
-      <nav>
-        <ul>
-          <li><Link to='/blogs'>blogs</Link></li>
-          <li><Link to='/users'>users</Link></li>
-          <li>{user.name} logged-in </li>
-          <li><button onClick={handleLogout}>Logout</button></li>
-        </ul>
-      </nav>
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          <Button color="inherit" component={Link} to='/blogs'>blogs</Button>
+          <Button color="inherit" component={Link} to='/users'>users</Button>
+          <span>{user.name} logged-in </span>
+          <Button color="inherit" onClick={handleLogout}>Logout</Button>
+        </Toolbar>
+      </AppBar>
+      <Container>
+        <h2>blog app</h2>
+        <Notification />
 
-      <h2>blog app</h2>
-      <Notification />
-
-      <Switch>
-        <Route path='/users/:id'>
-          <User />
-        </Route>
-        <Route path='/users'>
-          <Users />
-        </Route>
-        <Route path='/blogs/:id'>
-          <Blog blog={blog} user={user} likeBlog={like} deleteBlog={remove} addComment={addCommentToBlog}/>
-        </Route>
-        <Route path='/blogs'>
-          {blogForm()}
-
-          {blogs.map(blog =>
-            <div key={blog.id} style={blogStyle}>
-              <Link to={`/blogs/${blog.id}`} >{blog.title} {blog.author}</Link>
-            </div>
-          )}
-        </Route>
-      </Switch>
-
-
-    </div>
+        <Switch>
+          <Route path='/users/:id'>
+            <User />
+          </Route>
+          <Route path='/users'>
+            <Users />
+          </Route>
+          <Route path='/blogs/:id'>
+            <Blog blog={blog} user={user} likeBlog={like} deleteBlog={remove} addComment={addCommentToBlog} />
+          </Route>
+          <Route path='/blogs'>
+            {blogForm()}
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Title</TableCell>
+                  <TableCell>Author</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {blogs.map(blog =>
+                  <TableRow key={blog.id}>
+                    <TableCell><MatLink component={Link} to={`/blogs/${blog.id}`} >{blog.title}</MatLink></TableCell><TableCell> {blog.author}</TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </Route>
+        </Switch>
+      </Container>
+    </>
   )
 }
 

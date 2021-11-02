@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+import { Link, Button, TextField } from '@mui/material'
+
 export const blogStyle = {
   paddingTop: 10,
   paddingLeft: 2,
@@ -25,24 +27,30 @@ const Blog = ({ blog, user = null, likeBlog, deleteBlog, addComment }) => {
   return (
     <div className='blog'>
       <h2>{blog.title} {blog.author}</h2>
-      <a href={blog.url} rel="noreferrer" target="_blank">{blog.url}</a><br />
+      <Link href={blog.url} rel="noreferrer" target="_blank">{blog.url}</Link><br />
       {blog.likes} likes
-      <button
+      <Button
+        variant="outlined"
+        size="small"
+        sx={{ m: '1rem' }}
         className='like'
         onClick={() => likeBlog(blog.id, blog.likes)}
       >like
-      </button><br />
+      </Button><br />
       {blog?.user?.name ? `added by ${blog.user.name}` : ''}<br />
-      {blog?.user?.name === user?.name && <button onClick={() => deleteBlog(blog)}>remove</button>}
+      {blog?.user?.name === user?.name && <Button onClick={() => deleteBlog(blog)}>remove</Button>}
       <h3>Comments</h3>
-      <input
+      <TextField
         type="text"
         value={comment}
         onChange={({ target }) => setComment(target.value)}
       />
-      <button
+      <Button
+        sx={{ m: '1rem' }}
+        variant="contained"
+        size="large"
         onClick={submitComment}
-      >add comment</button>
+      >add comment</Button>
       {blog.comments.length
         ? <div>
           <ul>{blog.comments.map((comment) => <li key={comment}>{comment}</li>)}</ul>
